@@ -1,0 +1,5 @@
+1. create the folder you want your virtual environment to run in
+2. open cmd in that folder and type "python -m venv env" (note: env is the name of the virtual environment)
+3. Still in the same folder, on the terminal, type "env\Scripts\activate" to activate the virtual environment
+4. Use pip install <dependency> to install any dependencies
+5. Create your python files/scripts in the same directory that the "env" directory can be found (i.e. the current directory you are in)

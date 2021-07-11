@@ -13,17 +13,16 @@ class Weather:
     '''A class that accesses the weather report for a given city'''
 
     def __init__(self):
-        self._temperature = None
-        self._json = None
+        self._temperature = 0
+        self._json = {}
         self._zip = ZIP
         self._city = CITY
         self._state = STATE
         
-    def get_weather_report(self, zip=ZIP, city=CITY, state=STATE) -> bool:
+    def get_weather_report(self, city=CITY, state=STATE, zip=ZIP) -> bool:
         '''Gets the current temperature and humidity for the given city'''
 
         url = f"{BASE_URL}zip={zip}&appid={API_KEY}"
-        # url = BASE_URL + "q=" + self._city + "&appid=" + API_KEY
         response = requests.get(url)
         if response.status_code == 200:
             data = response.json()

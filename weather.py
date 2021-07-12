@@ -31,7 +31,7 @@ class Weather:
 
             more_info = data['weather'][0]
             weather_icon = WEATHER_ICON_LINK + more_info['icon']
-            description = more_info['main']
+            description = more_info['main'].lower()
             more_description = more_info['description']
 
             self._json = {

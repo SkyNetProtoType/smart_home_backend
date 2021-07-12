@@ -22,12 +22,12 @@ def test():
   '''Default mapping for testing the endpoint'''
   return jsonify({'welcome': 'Backend service works!'})
 
-@app.route("/weather")
+
 def get_weather():
   '''
-    Retrieves the weather information using the weather api
+    Retrieves the weather information using the weather API
     returns: a JSON with the weather information if all arguments are valid and
-            the weather report is sucessfully retrieves, otherwise returns an empty
+            the weather report is sucessfully retrieved, otherwise returns an empty
             JSON object.
   '''
 

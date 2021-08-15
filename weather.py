@@ -1,4 +1,3 @@
-from os import stat
 from decouple import config
 import requests
 

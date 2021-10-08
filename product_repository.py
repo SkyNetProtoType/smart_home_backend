@@ -18,17 +18,19 @@ class ProductRepository:
             '''
     
     UPDATE_PRODUCT = '''UPDATE products
-            SET quantity=?, addedToCart=?
+            SET quantity=?, addedToCart=?, category=?
             WHERE id = ?'''
     
     SELECT_PRODUCT = '''SELECT id, name, category, quantity, addedToCart
             FROM products
             WhERE id = ?
             '''
-    DELETE_ALL_PRODUCTS = '''DELETE FROM products'''
-    
     SELECT_ALL_PRODUCTS = '''SELECT * FROM products'''
 
+    DELETE_PRODUCT = '''DELETE FROM products WHERE id=?'''
+
+    DELETE_ALL_PRODUCTS = '''DELETE FROM products'''
+    
 
     @staticmethod
     def connect_to_database(db_name: str) -> Connection:
@@ -43,6 +45,7 @@ class ProductRepository:
 
         return connection
     
+    
     @staticmethod
     def create_table(conn: Connection):
         '''Creates the product table if it doesn't exist'''
@@ -52,7 +55,7 @@ class ProductRepository:
         except Error as e:
             print('Create Table Error: '+ str(e))
 
-    
+
     @staticmethod
     def insert(product: dict, conn:Connection) -> int:
         '''Inserts a product into the products table. Returns the id
@@ -69,6 +72,32 @@ class ProductRepository:
 
         return cursor.lastrowid
 
+
+    @staticmethod
+    def retrieve(conn: Connection, id) -> List[tuple]:
+        '''Retrieves all of the products in the product table'''
+
+        try:
+            cursor = conn.cursor()
+            cursor.execute(ProductRepository.SELECT_PRODUCT, (id,))
+        except Error as e:
+            print(e)
+        
+        return cursor.fetchall()
+    
+    @staticmethod
+    def retrieve_all(conn: Connection) -> List[tuple]:
+        '''Retrieves all of the products in the product table'''
+
+        try:
+            cursor = conn.cursor()
+            cursor.execute(ProductRepository.SELECT_ALL_PRODUCTS)
+        except Error as e:
+            print(e)
+        
+        return cursor.fetchall()
+
+
     @staticmethod
     def update(product: dict, conn: Connection):
         '''Updates a specific product in the database '''
@@ -76,10 +105,22 @@ class ProductRepository:
         try:
             cursor = conn.cursor()
             cursor.execute(ProductRepository.UPDATE_PRODUCT, (product['quantity'], product['addedToCart'],
-            product['id']))
+            product['category'], product['id']))
             conn.commit()
         except Error as e:
             print ('Update Error: '+ str(e))
+
+
+    @staticmethod
+    def delete(conn: Connection, id):
+        '''Delete a product in the product table'''
+        cursor = None
+        try:
+            cursor = conn.cursor()
+            cursor.execute(ProductRepository.DELETE_PRODUCT, (id,))
+            conn.commit()
+        except Error as e:
+            print ('Delete Error: '+ str(e))
 
 
     @staticmethod
@@ -94,22 +135,9 @@ class ProductRepository:
             print ('Delete Error: '+ str(e))
 
     
-    @staticmethod
-    def retrieve_all(conn: Connection) -> List[tuple]:
-        '''Retrieves all of the products in the product table'''
-
-        try:
-            cursor = conn.cursor()
-            cursor.execute(ProductRepository.SELECT_ALL_PRODUCTS)
-        except Error as e:
-            print(e)
-        
-        return cursor.fetchall()
-    
 
 if __name__ == "__main__":
     import os
-    from product import load_products
 
     #establishing the path to the database
     current_dir = os.path.dirname(__file__)
@@ -150,4 +178,5 @@ if __name__ == "__main__":
         #     ProductRepository.insert(product, conn)
 
         # ProductRepository.delete_all(conn)
-        print(ProductRepository.retrieve_all(conn))
+        # print(ProductRepository.retrieve_all(conn))
+        print(ProductRepository.retrieve(conn, "10"))

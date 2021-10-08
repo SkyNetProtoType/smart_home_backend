@@ -31,12 +31,13 @@ class ProductService:
         products_as_json:List[dict] = []
 
         for tuple in result_set:
+            id, name, category, quantity, cart_status = tuple
             product_json = {}
-            product_json['id'] = tuple[0]
-            product_json['name'] = tuple[1]
-            product_json['category'] = tuple[2]
-            product_json['quantity'] = tuple[3]
-            product_json['addedToCart'] = True if tuple[4] == 1 else False
+            product_json['id'] = id
+            product_json['name'] = name
+            product_json['category'] = category
+            product_json['quantity'] = quantity
+            product_json['addedToCart'] = True if cart_status == 1 else False
             products_as_json.append(product_json)
         
         return products_as_json

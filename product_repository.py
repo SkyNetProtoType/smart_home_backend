@@ -122,15 +122,18 @@ if __name__ == "__main__":
         # ProductRepository.create_table(conn) #ignores creating a table if it exists
         
         #-------RECEIVE USER INPUT AND INSERT INTO DATABASE-----
-        # id, name, category, qty, addedToCart = input("Enter <id>, <name>, <category>, <qty>, <cartstatus: 0 or 1>: ").split(', ')
-        # product = { 'name': name,
-        #             'category': category,
-        #             'quantity': int(qty),
-        #             'addedToCart': addedToCart,
-        #             'id' : id,
-        #         }
-        # product_id = ProductRepository.insert(product, conn)
-        # print('Product Id:', product_id)
+        # id = int(input("Enter next id number after last item in the table: "))
+        # while True:
+        #     name, category = input("Enter <name>, <category>: ").split(', ')
+        #     product = { 'name': name,
+        #                 'category': category.capitalize(),
+        #                 'quantity': 1,
+        #                 'addedToCart': 0,
+        #                 'id' : id,
+        #             }
+        #     id+=1
+        #     product_id = ProductRepository.insert(product, conn)
+        #     print('Product Id:', product_id)
        
         #------UPDATE A SPECIFIC PRODUCT IN THE DATABASE-------
         # product2 = { 'name': name,

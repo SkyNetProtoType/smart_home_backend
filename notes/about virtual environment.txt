@@ -6,4 +6,12 @@
 
 
 ACTIVATING VIRTUAL ENVIRONMENT
-o In the project folder containning the folder env, type "env\Scripts\activate" to activate the virtual environment"
+o In the project folder containning the folder env, type ".env\Scripts\activate" to activate the virtual environment"
+
+
+LOGGING YOUR DEPENDENCIES
+To log the dependencies to install:
+
+1. Make sure you have your virtual environment activated
+2. Install any dependencies you need using the 'pip' command
+3. Enter 'pip freeze > requirements.txt' to log all your dependencies into that text file

@@ -1,35 +1,26 @@
 from decouple import config
 import requests
 
-
 API_KEY = config('WEATHER_API_KEY')
-CITY = config('HOME_CITY')
-STATE = config('HOME_STATE')
-ZIP = config('HOME_ZIP')
 BASE_URL = "https://api.openweathermap.org/data/2.5/weather?"
 WEATHER_ICON_LINK = " http://openweathermap.org/img/wn/10d@2x.png"
 
 class WeatherService:
     '''A class that accesses the weather report for a given city'''
 
-    def __init__(self):
-        pass
+    @staticmethod
+    def validate_request_args(state, city, zipcode):
+        '''Validates the weather query parameters in the url request'''
+        if city == None or state == None or zipcode == None or len(zipcode) != 5:
+            return False
+        else:
+            return True
 
-        
-    def get_weather_report(self, city=CITY, state=STATE, zip=ZIP) -> dict:
+    @staticmethod    
+    def get_weather_report(state, city, zip) -> dict:
         '''
-            Handles the request to get the current weather information
-
-            #Parameters:
-                city: the city where you want the weather info
-                state: the associated state of the city
-                zipcode: the zip code of the city
-            
-            #Returns:
-                JSON/Dict containing the weather information
-
-            #Exceptions:
-                Raises an exception if the response status is not OK (200)
+            Handles the request to get the current weather information. Makes
+            a request to a third party service to get the data.
         '''
 
         url = f"{BASE_URL}zip={zip}&appid={API_KEY}"
@@ -48,7 +39,7 @@ class WeatherService:
         description = more_info['main'].lower()
         more_description = more_info['description']
 
-        weather_report = {
+        return {
             'temp': temperature,
             'description': description,
             'more_description': more_description,
@@ -58,12 +49,11 @@ class WeatherService:
             'zipcode' : zip,
         }
 
-        return weather_report
-
 
     
 
 
 if __name__ == "__main__":
-    weather_service = WeatherService()
-    print(weather_service.get_weather_report("Pflugerville", "Texas", "78660"))
+    assert(WeatherService.validate_request_args("texas", "pflugerville", "7866")
+    == False)
+    # print(WeatherService.get_weather_report("Texas","Pflugerville","78660"))

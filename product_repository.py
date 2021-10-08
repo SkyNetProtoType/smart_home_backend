@@ -1,9 +1,11 @@
-
 import sqlite3
 from typing import List
 from sqlite3 import Error, Connection
 
 class ProductRepository:
+    '''A class that performs CRUD operations on the products table in
+    smarthome.db'''
+
     CREATE_PRODUCTS_TABLE = '''CREATE TABLE IF NOT EXISTS products
           (id INTEGER PRIMARY KEY,
            name TEXT,
@@ -43,6 +45,7 @@ class ProductRepository:
     
     @staticmethod
     def create_table(conn: Connection):
+        '''Creates the product table if it doesn't exist'''
         try:
             cursor = conn.cursor()
             cursor.execute(ProductRepository.CREATE_PRODUCTS_TABLE)
@@ -52,7 +55,7 @@ class ProductRepository:
     
     @staticmethod
     def insert(product: dict, conn:Connection) -> int:
-        '''Inserts a task object into the tasks table. Returns the id
+        '''Inserts a product into the products table. Returns the id
         of the row inserted'''
 
         cursor = None
@@ -68,6 +71,7 @@ class ProductRepository:
 
     @staticmethod
     def update(product: dict, conn: Connection):
+        '''Updates a specific product in the database '''
         cursor = None
         try:
             cursor = conn.cursor()
@@ -80,6 +84,7 @@ class ProductRepository:
 
     @staticmethod
     def delete_all(conn: Connection):
+        '''Deletes all the rows in the product table'''
         cursor = None
         try:
             cursor = conn.cursor()
@@ -91,7 +96,7 @@ class ProductRepository:
     
     @staticmethod
     def retrieve_all(conn: Connection) -> List[tuple]:
-        '''Retrieves all of the tasks in the task table'''
+        '''Retrieves all of the products in the product table'''
 
         try:
             cursor = conn.cursor()
@@ -112,9 +117,11 @@ if __name__ == "__main__":
     print(db_source) 
     conn = ProductRepository.connect_to_database(db_source)
 
-    #performing test on database
+    #------PERFORMING VARIOUS CRUD TESTS ON THE DATABASE-----
     if conn is not None:
         # ProductRepository.create_table(conn) #ignores creating a table if it exists
+        
+        #-------RECEIVE USER INPUT AND INSERT INTO DATABASE-----
         # id, name, category, qty, addedToCart = input("Enter <id>, <name>, <category>, <qty>, <cartstatus: 0 or 1>: ").split(', ')
         # product = { 'name': name,
         #             'category': category,
@@ -125,6 +132,7 @@ if __name__ == "__main__":
         # product_id = ProductRepository.insert(product, conn)
         # print('Product Id:', product_id)
        
+        #------UPDATE A SPECIFIC PRODUCT IN THE DATABASE-------
         # product2 = { 'name': name,
         #             'category': category,
         #             'quantity': int(qty),
@@ -133,7 +141,7 @@ if __name__ == "__main__":
         #         }
         # ProductRepository.update(product2, conn)
 
-        # PRELOADING DATA
+        #-------PRELOADING DATA INTO THE DATABASE---------
         # preloaded_products = load_products()
         # for product in preloaded_products:
         #     ProductRepository.insert(product, conn)

@@ -61,19 +61,20 @@ class TV:
 
 
 if __name__ == "__main__":
-    test_tv = TV()
+    pass
+    # test_tv = TV()
     # test_tv.toggle_power()
-    # test_tv.increase_volume(5)
+    # test_tv.decrease_volume(5)
     # test_tv.open_source()
     # test_tv.go_back()
     
-    operation =  test_tv._get_tv_command("increase tv volume by 5")
-    print(operation)
-    operation =  test_tv._get_tv_command("decrease tv volume by 5")
-    print(operation)
-    operation =  test_tv._get_tv_command("turn on tv volume")
-    print(operation)
-    operation =  test_tv._get_tv_command("Open tv source")
-    print(operation)
-    operation =  test_tv._get_tv_command("Go back on tv")
-    print(operation)
+    # operation =  test_tv._get_tv_command("increase tv volume by 5")
+    # print(operation)
+    # operation =  test_tv._get_tv_command("decrease tv volume by 5")
+    # print(operation)
+    # operation =  test_tv._get_tv_command("turn on tv volume")
+    # print(operation)
+    # operation =  test_tv._get_tv_command("Open tv source")
+    # print(operation)
+    # operation =  test_tv._get_tv_command("Go back on tv")
+    # print(operation)

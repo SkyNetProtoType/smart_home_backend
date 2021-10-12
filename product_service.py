@@ -1,5 +1,6 @@
 from typing import List
 from product_repository import ProductRepository
+from datetime import datetime
 import os
 
 class ProductService:
@@ -14,6 +15,13 @@ class ProductService:
         to a JSON before returning it to the controller'''
         connection = ProductRepository.connect_to_database(ProductService.DB_SRC)
         result_set =  ProductRepository.retrieve_all(connection)
+        return ProductService.convert_to_json_list(result_set)
+
+    @staticmethod
+    def get_cart_products():
+        '''Retrieves all the cart items from the database'''
+        connection = ProductRepository.connect_to_database(ProductService.DB_SRC)
+        result_set =  ProductRepository.retrieve_cart_items(connection)
         return ProductService.convert_to_json_list(result_set)
 
 
@@ -41,3 +49,22 @@ class ProductService:
             products_as_json.append(product_json)
         
         return products_as_json
+
+    
+    @staticmethod
+    def format_products_as_string(products: List[dict]):
+        '''Formats a list of products as a string with only their names'''
+
+        final_string = f"Shopping list for {datetime.now():%m-%d-%Y}\n"
+        final_string += "================================\n"
+        for bulleting, product in enumerate(products, 1):
+            final_string += f"{bulleting}. {product['name']}\n"
+        
+        return final_string
+        
+
+
+
+if __name__ == "__main__":
+    cart_products = [{'name':'fries'},{'name':'bread'},{'name':'banana'}]
+    print(ProductService.format_products_as_string(cart_products))

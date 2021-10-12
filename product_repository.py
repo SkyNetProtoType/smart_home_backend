@@ -25,7 +25,9 @@ class ProductRepository:
             FROM products
             WhERE id = ?
             '''
-    SELECT_ALL_PRODUCTS = '''SELECT * FROM products'''
+    SELECT_ALL_PRODUCTS = '''SELECT * FROM products ORDER BY name'''
+
+    SELECT_CART_PRODUCTS = '''SELECT * FROM products WHERE addedToCart=1 ORDER BY name'''
 
     DELETE_PRODUCT = '''DELETE FROM products WHERE id=?'''
 
@@ -92,6 +94,18 @@ class ProductRepository:
         try:
             cursor = conn.cursor()
             cursor.execute(ProductRepository.SELECT_ALL_PRODUCTS)
+        except Error as e:
+            print(e)
+        
+        return cursor.fetchall()
+
+    @staticmethod
+    def retrieve_cart_items(conn: Connection) -> List[tuple]:
+        '''Retrieves all of the products in the product table that are in the cart'''
+
+        try:
+            cursor = conn.cursor()
+            cursor.execute(ProductRepository.SELECT_CART_PRODUCTS)
         except Error as e:
             print(e)
         

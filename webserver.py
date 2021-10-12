@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 from product_service import ProductService
 from weather_service import WeatherService
+import message_service
 
 app = Flask(__name__)
 # app.debug = True
@@ -30,6 +31,14 @@ def products():
     ProductService.update_product(product)
     return jsonify(product['id'])
 
+
+@app.route("/send/cart", methods=['POST'])
+def send_cart_message():
+  cart_products = ProductService.get_cart_products()
+  cart_product_as_str = ProductService.convert_product_to_str(cart_products)
+  sid = message_service.sendMessage(cart_product_as_str)
+  print(f"Message sent: {sid} ")
+  
 
 
 if __name__ == "__main__":

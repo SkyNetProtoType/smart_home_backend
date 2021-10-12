@@ -52,7 +52,7 @@ class ProductService:
 
     
     @staticmethod
-    def format_products_as_string(products: List[dict]):
+    def convert_product_to_str(products: List[dict]): 
         '''Formats a list of products as a string with only their names'''
 
         final_string = f"Shopping list for {datetime.now():%m-%d-%Y}\n"
@@ -67,4 +67,4 @@ class ProductService:
 
 if __name__ == "__main__":
     cart_products = [{'name':'fries'},{'name':'bread'},{'name':'banana'}]
-    print(ProductService.format_products_as_string(cart_products))
+    print(ProductService.convert_product_to_str(cart_products))

@@ -28,6 +28,7 @@ class ProductConsole:
         products = ProductRepository.retrieve_all(self._conn)
         table.add_rows(products)
         print(table)
+        print(f"Total (last Id): {len(products)}")
         
 
     def show_specific_product(self):
@@ -61,6 +62,13 @@ class ProductConsole:
         ProductRepository.update(product, self._conn)
         print("Update successful for id: ", product['id'])
     
+    def update_cart_status(self):
+        product = self.retrieve_product()
+        new_cart_status = int(input("Enter the new cart status <0> or <1>: "))
+        product['addedToCart'] = new_cart_status
+        ProductRepository.update(product, self._conn)
+        print("Update successful for id: ", product['id'])
+    
     def delete_product(self):
         product = self.retrieve_product()
         ProductRepository.delete(self._conn, product['id'])
@@ -72,7 +80,7 @@ if __name__ == "__main__":
     console = ProductConsole()
 
     print("Product Database Console\n========================")
-    menu_options = "1. Show all products\n2. Show a product\n3. Insert product\n4. Update category\n5. Delete product\n\n Enter 'q' to quit\n"
+    menu_options = "1. Show all products\n2. Show a product\n3. Insert product\n4. Update category\n5. Update cart status\n6. Delete product\n\n Enter 'q' to quit\n"
     print("Choose an option:")
     print(menu_options)
     choice = input("Option: ")
@@ -86,6 +94,8 @@ if __name__ == "__main__":
         elif choice ==  "4":
             console.update_category()
         elif choice == "5":
+            console.update_cart_status()
+        elif choice == "6":
             console.delete_product()
         else:
             print("Choose an option on the menu or Enter 'q'")

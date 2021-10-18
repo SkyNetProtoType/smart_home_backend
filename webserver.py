@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 from product_service import ProductService
 from weather_service import WeatherService
-import message_service
+from todoist_service import TodoistService
 
 app = Flask(__name__)
 # app.debug = True
@@ -33,11 +33,12 @@ def products():
 
 
 @app.route("/send/cart", methods=['POST'])
-def send_cart_message():
+def send_cart_to_phone():
   cart_products = ProductService.get_cart_products()
-  cart_product_as_str = ProductService.convert_product_to_str(cart_products)
-  sid = message_service.sendMessage(cart_product_as_str)
-  print(f"Message sent: {sid} ")
+  shopping_list_id = 2276166027
+  service = TodoistService()
+  for item in cart_products:
+    service.addItemToProject(item['name'], shopping_list_id)
   
 
 

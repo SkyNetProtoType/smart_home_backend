@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, json, jsonify, request
 from flask_cors import CORS
 from product_service import ProductService
 from weather_service import WeatherService
@@ -30,6 +30,14 @@ def products():
     product['addedToCart'] = 1 if product['addedToCart'] == True else 0
     ProductService.update_product(product)
     return jsonify(product['id'])
+
+
+@app.route("/product", methods=['POST'])
+def product():
+  product = request.get_json()
+  ProductService.add_new_product(product)
+  print("New item inserted with id: ", product['id'])
+  return jsonify(product['id'])
 
 
 @app.route("/send/cart", methods=['POST'])

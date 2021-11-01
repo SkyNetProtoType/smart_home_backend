@@ -24,6 +24,11 @@ class ProductService:
         result_set =  ProductRepository.retrieve_cart_items(connection)
         return ProductService.convert_to_json_list(result_set)
 
+    @staticmethod
+    def add_new_product(product):
+        '''Adds a new product to the database'''
+        connection = ProductRepository.connect_to_database(ProductService.DB_SRC)
+        ProductRepository.insert(product, connection)
 
     @staticmethod
     def update_product(product):

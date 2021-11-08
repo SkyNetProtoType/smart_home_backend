@@ -3,6 +3,8 @@ from flask_cors import CORS
 from product_service import ProductService
 from weather_service import WeatherService
 from todoist_service import TodoistService
+from email_service import handle_energy_data_request
+from system_util import SystemUtil
 
 app = Flask(__name__)
 # app.debug = True
@@ -48,7 +50,15 @@ def send_cart_to_phone():
   for item in cart_products:
     service.addItemToProject(item['name'], shopping_list_id)
   
+  
+@app.route("/energy", methods=['GET'])
+def energy():
+  return jsonify(handle_energy_data_request())
 
+
+@app.route("/battery", methods=['GET'])
+def battery():
+  return jsonify(SystemUtil.get_battery_info())
 
 if __name__ == "__main__":
   app.run()

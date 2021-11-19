@@ -3,7 +3,10 @@ import re
 from typing import List
 from decouple import config
 from energy_usage import EnergyUsage
-from datetime import date
+from system_util import SystemUtil
+from datetime import datetime
+
+ONE_WEEK = 7
 
 def setup_connection() -> imaplib.IMAP4_SSL:
     '''Sets up the connection to the email'''
@@ -20,9 +23,9 @@ def get_latest_energy_data():
     mail.select("INBOX")
     _, from_reliant = mail.uid('search', None, '(SUBJECT "Your Reliant Weekly Summary")')
     energy_summary_emails = from_reliant[0].split()
-    # week_summary = energy_summary_emails[:-4:-1][::-1] #we need the oldest one first (3 weeks back)
+    # week_summary = energy_summary_emails[:-5:-1][::-1] #we need the oldest one first (4 weeks back)
     week_summary = energy_summary_emails[:-2:-1] #newest
-    energy_data: List[EnergyUsage] = []
+    energy_data: List[dict] = []
 
     for each_mail in week_summary:
         _, data = mail.fetch(each_mail, '(RFC822)')
@@ -39,46 +42,44 @@ def get_latest_energy_data():
                 usage, cost = re.findall(r"......kWh?|\$.....", decoded_message)[:2]
                 usage = usage.replace("kWh","").strip()
                 break
-        energy_data.append(EnergyUsage(date_range, usage, cost))
+        energy_data.append({"dates": date_range, "usage": usage, "cost": cost})
     mail.close()
     mail.logout()
     return energy_data
 
 
-def store_energy_data(energy_data: List[EnergyUsage]):
+def store_energy_data(energy_data: List[dict]):
     with open("energy_usages.txt", 'a') as file:
-        for usage in energy_data:
-            file.write(f'{usage.get_dates()},{usage.get_usage()},{usage.get_cost()}\n')
+        for data in energy_data:
+            file.write(f'{data["dates"]},{data["usage"]},{data["cost"]},{datetime.now()}\n')
 
 
 def get_stored_energy_data()-> List[dict]:
     energy_data: List[dict] = []
     with open("energy_usages.txt", 'r') as file:
-        last_three_recent_data = file.readlines()[::-1][:3]
+        last_three_recent_data = file.readlines()[::-1]
         for data in last_three_recent_data:
-            dates,usage,cost = data.strip().split(",")
+            dates,usage,cost,timestamp = data.strip().split(",")
             energy_data.append(
                 {
                     "dates": dates,
                     "usage": usage,
-                    "cost": cost
+                    "cost": cost,
+                    "timestamp": timestamp
                 }
             )
     return energy_data
 
 
-def handle_energy_data_request():
-    weekDays = ("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday")
-    weekday = date.today().weekday()
-
-    #only update the stored dataon Tuesdays after a new summary has been published
-    if weekday == weekDays.index("Tuesday"):
+def handle_energy_data_request() -> List[dict]:
+    local_energy_data:List[dict] = get_stored_energy_data()[:4]
+    recent_data_date = local_energy_data[0]['timestamp']
+    if SystemUtil.date_diff_from_now(recent_data_date) >= ONE_WEEK:
+        print("Getting latest energy data...")
         latest_data = get_latest_energy_data()
         store_energy_data(latest_data)
-    
-    return get_stored_energy_data()
-    
-
+        local_energy_data = get_stored_energy_data() #lazy update - use append later
+    return local_energy_data[::-1] #we need the latest at the end
         
 
 
@@ -92,5 +93,10 @@ if __name__ == "__main__":
     # data = get_latest_energy_data()
     # store_energy_data(data)
     # print(get_stored_energy_data())
-    print(handle_energy_data_request())
+    # print(handle_energy_data_request())
+    # [print(data) for data in get_stored_energy_data()[:4]]
+    [print(data) for data in handle_energy_data_request()[:4]]
+    # print()
+    # print(get_stored_energy_data()[0]['timestamp'])
+    # print(SystemUtil.date_diff_from_now(get_stored_energy_data()[0]['timestamp']))
 

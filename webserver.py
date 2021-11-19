@@ -3,7 +3,7 @@ from flask_cors import CORS
 from product_service import ProductService
 from weather_service import WeatherService
 from todoist_service import TodoistService
-from email_service import handle_energy_data_request
+from energy_service import handle_energy_data_request
 from system_util import SystemUtil
 
 app = Flask(__name__)

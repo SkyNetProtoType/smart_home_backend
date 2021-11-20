@@ -12,7 +12,7 @@ def convert_to_fahrenheit(current_temp) -> int:
 def convert_to_localtime(epoch_timestamp):
     local_timestamp = datetime.fromtimestamp(epoch_timestamp)
     time_portion = datetime.strptime(local_timestamp.strftime("%m/%j/%y %H:%M"), "%m/%j/%y %H:%M").time()
-    return time_portion.strftime("%I:%M %p")
+    return time_portion.strftime("%I:%M")
 
 class WeatherService:
     '''A class that accesses the weather report for a given city'''

@@ -20,7 +20,12 @@ def test():
 def weather(state, city, zip):
   if WeatherService.validate_request_args(state, city, zip) == False:
     raise RuntimeError(f"Invalid request args: {state}, {city}, {zip}")
-  return jsonify(WeatherService.get_weather_report(state, city, zip))
+  return jsonify(WeatherService.get_current_report(state, city, zip))
+
+
+@app.route("/weather/hourly", methods=['GET'])
+def weather_hourly():
+  return jsonify(hourly_weather_infos = WeatherService.get_hourly_info(lat=30.4421, lon=-97.6299))
 
 
 @app.route("/products", methods = ['POST', 'GET'])

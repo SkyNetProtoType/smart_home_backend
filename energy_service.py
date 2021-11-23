@@ -57,8 +57,8 @@ def store_energy_data(energy_data: List[dict]):
 def get_stored_energy_data()-> List[dict]:
     energy_data: List[dict] = []
     with open("energy_usages.txt", 'r') as file:
-        last_three_recent_data = file.readlines()[::-1]
-        for data in last_three_recent_data:
+        recent_data = file.readlines()[::-1] #putting the latest first
+        for data in recent_data:
             dates,usage,cost,timestamp = data.strip().split(",")
             energy_data.append(
                 {
@@ -72,14 +72,14 @@ def get_stored_energy_data()-> List[dict]:
 
 
 def handle_energy_data_request() -> List[dict]:
-    local_energy_data:List[dict] = get_stored_energy_data()[:4]
-    recent_data_date = local_energy_data[0]['timestamp']
+    monthly_data:List[dict] = get_stored_energy_data()[:4]
+    recent_data_date = monthly_data[0]['timestamp']
     if SystemUtil.date_diff_from_now(recent_data_date) >= ONE_WEEK:
         print("Getting latest energy data...")
         latest_data = get_latest_energy_data()
         store_energy_data(latest_data)
-        local_energy_data = get_stored_energy_data() #lazy update - use append later
-    return local_energy_data[::-1] #we need the latest at the end
+        monthly_data = get_stored_energy_data()[:4]
+    return monthly_data[::-1] #we need the latest at the end
         
 
 
@@ -95,7 +95,7 @@ if __name__ == "__main__":
     # print(get_stored_energy_data())
     # print(handle_energy_data_request())
     # [print(data) for data in get_stored_energy_data()[:4]]
-    [print(data) for data in handle_energy_data_request()[:4]]
+    [print(data) for data in handle_energy_data_request()]
     # print()
     # print(get_stored_energy_data()[0]['timestamp'])
     # print(SystemUtil.date_diff_from_now(get_stored_energy_data()[0]['timestamp']))

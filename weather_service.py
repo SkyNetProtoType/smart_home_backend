@@ -92,7 +92,7 @@ class WeatherService:
             single_hour_info = {
                 "time" : convert_to_localtime(info['dt'], ignore_minutes=True),
                 "temp": convert_to_fahrenheit(info['temp']),
-                "chance_of_rain":info['pop'], 
+                "chance_of_rain":str(int(info['pop']) * 100), 
                 "description": info['weather'][0]['main'].lower(), 
                 }
             result.append(single_hour_info)

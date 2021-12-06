@@ -46,24 +46,17 @@ class WeatherService:
         main_info = data['main']
         temperature = convert_to_fahrenheit(main_info['temp'])
         feels_like = convert_to_fahrenheit(main_info['feels_like'])
-        min_temperature = convert_to_fahrenheit(main_info['temp_min'])
-        max_temperature = convert_to_fahrenheit(main_info['temp_max'])
         sunset_time = convert_to_localtime(data['sys']['sunset'])
 
         more_info = data['weather'][0]
-        weather_icon = WEATHER_ICON_LINK + more_info['icon']
         description = more_info['main'].lower()
-        more_description = more_info['description']
 
         return {
             'temp': temperature,
             'feels_like': feels_like,
-            'min_temp': min_temperature,
-            'max_temp': max_temperature,
             'sunset': sunset_time,
+            'sunset_unix': data['sys']['sunset'],
             'description': description,
-            'more_description': more_description,
-            'icon': weather_icon,
             'state': state,
             'city' :city,
             'zipcode' : zip,
@@ -82,7 +75,7 @@ class WeatherService:
             raise RuntimeError("Request Failed with a response status code: {}".format(status_code))
         
         data = response.json()
-        hourly_info = data['hourly'][1:4] #next 3 hours
+        hourly_info = data['hourly'][0:4] #next 4 hours
         alerts = []
         try:
             alerts = data['alerts']
@@ -92,6 +85,7 @@ class WeatherService:
             single_hour_info = {
                 "time" : convert_to_localtime(info['dt'], ignore_minutes=True),
                 "temp": convert_to_fahrenheit(info['temp']),
+                "feels_like": convert_to_fahrenheit(info['feels_like']),
                 "chance_of_rain":str(int(info['pop']) * 100), 
                 "description": info['weather'][0]['main'].lower(), 
                 }

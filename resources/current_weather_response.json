@@ -1,0 +1,44 @@
+{
+    "coord": {
+      "lon": -97.6299,
+      "lat": 30.4421
+    },
+    "weather": [
+      {
+        "id": 804,
+        "main": "Clouds",
+        "description": "overcast clouds",
+        "icon": "04d"
+      }
+    ],
+    "base": "stations",
+    "main": {
+      "temp": 287.18,
+      "feels_like": 286.28,
+      "temp_min": 286.08,
+      "temp_max": 288.36,
+      "pressure": 1021,
+      "humidity": 63
+    },
+    "visibility": 10000,
+    "wind": {
+      "speed": 4.02,
+      "deg": 176,
+      "gust": 8.05
+    },
+    "clouds": {
+      "all": 90
+    },
+    "dt": 1638809556,
+    "sys": {
+      "type": 2,
+      "id": 2011221,
+      "country": "US",
+      "sunrise": 1638796444,
+      "sunset": 1638833381
+    },
+    "timezone": -21600,
+    "id": 0,
+    "name": "Pflugerville",
+    "cod": 200
+  }

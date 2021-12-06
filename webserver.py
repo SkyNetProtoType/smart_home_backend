@@ -5,7 +5,7 @@ from weather_service import WeatherService
 from todoist_service import TodoistService
 from energy_service import handle_energy_data_request
 from system_util import SystemUtil
-from light_service import Lights, LightType
+from light_service import LightService, LightType
 
 app = Flask(__name__)
 # app.debug = True
@@ -70,7 +70,7 @@ def battery():
 @app.route("/light/<type>/<indicator>", methods=['POST'])
 def lights(type, indicator):
   if "living_floor_lamp" == type.lower():
-    return jsonify(Lights.toggle(LightType.LIVING_ROOM_FLOOR_LAMP))
+    return jsonify(LightService.toggle(LightType.LIVING_ROOM_FLOOR_LAMP))
  
 
 

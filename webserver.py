@@ -73,7 +73,7 @@ def lights(light_type, action, value):
     return jsonify(LightService.toggle(LightType.LIVING_ROOM_FLOOR_LAMP))
   
   elif "living_floor_lamp" == light_type.lower() and "brightness" == action:
-    return jsonify(LightService.adjust_brightness(LightType.LIVING_ROOM_FLOOR_LAMP, value))
+    return jsonify(LightService.adjust_brightness(LightType.LIVING_ROOM_FLOOR_LAMP, int(value)))
 
   else:
     return jsonify({"error": f"No light of type <{light_type}> has been setup"})

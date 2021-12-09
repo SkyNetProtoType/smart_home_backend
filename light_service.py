@@ -25,13 +25,23 @@ class LightService:
     def toggle(light_type: object):
         status = ""
         if light_type == LightType.LIVING_ROOM_FLOOR_LAMP:
-            status = LightService.floor_lamp.toggle()
+            try:
+                status = LightService.floor_lamp.toggle()
+            except Exception as e:
+                print (e)
+                status = "error"
         return status
     
     @staticmethod
     def adjust_brightness(light_type: object, amount: int):
+        status = ""
         if light_type == LightType.LIVING_ROOM_FLOOR_LAMP:
-            LightService.floor_lamp.set_brightness(amount)
+            try:
+                status = LightService.floor_lamp.set_brightness(amount)
+            except Exception as e:
+                print(e)
+                status = "error"
+            return status
 
 
 if __name__ == "__main__":

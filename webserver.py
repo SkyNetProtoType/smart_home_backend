@@ -6,6 +6,7 @@ from todoist_service import TodoistService
 from energy_service import handle_energy_data_request
 from system_util import SystemUtil
 from light_service import LightService, LightType
+from settings_service import SettingsService
 
 app = Flask(__name__)
 # app.debug = True
@@ -77,6 +78,16 @@ def lights(light_type, action, value):
 
   else:
     return jsonify({"error": f"No light of type <{light_type}> has been setup"})
+
+
+@app.route("/settings", methods=['POST','GET'])
+def settings():
+  if 'GET' == request.method:
+    return jsonify(settings = SettingsService.get_dashboard_settings())
+  else:
+    updated_settings = request.get_json()
+    SettingsService.update_dashboard_settings(updated_settings)
+    return jsonify({"status": "Update Successful"})
 
 
 if __name__ == "__main__":

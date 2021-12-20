@@ -1,6 +1,7 @@
 from decouple import config
 import requests
 from datetime import datetime
+from pprint import pprint
 
 API_KEY = config('WEATHER_API_KEY')
 BASE_URL = "https://api.openweathermap.org/data/2.5/weather"
@@ -67,7 +68,7 @@ class WeatherService:
         '''Gets the hourly weather report and only keeps the next 3 hours'''
 
         result = []
-        exclude = "current,minutely,daily"
+        exclude = "minutely,daily"
         url = f"{BASE_URL_ONE_CALL}?lat={lat}&lon={lon}&exclude={exclude}&appid={API_KEY}"
         response = requests.get(url)
         status_code = response.status_code
@@ -75,7 +76,19 @@ class WeatherService:
             raise RuntimeError("Request Failed with a response status code: {}".format(status_code))
         
         data = response.json()
-        hourly_info = data['hourly'][0:4] #next 4 hours
+        #current info
+        current = data['current']
+        result.append({
+            "time": convert_to_localtime(current['dt'], ignore_minutes=True),
+            "temp": convert_to_fahrenheit(current['temp']),
+            "sunset": convert_to_localtime(current['sunset']),
+            "feels_like": convert_to_fahrenheit(current['feels_like']),
+            "description": current['weather'][0]['main'], 
+            "chance_of_rain": "",
+        })
+
+        #hourly info
+        hourly_info = data['hourly'][1:4] #next 3 hours after current hour
         alerts = []
         try:
             alerts = data['alerts']
@@ -87,7 +100,8 @@ class WeatherService:
                 "temp": convert_to_fahrenheit(info['temp']),
                 "feels_like": convert_to_fahrenheit(info['feels_like']),
                 "chance_of_rain":str(int(info['pop']) * 100), 
-                "description": info['weather'][0]['main'].lower(), 
+                "description": info['weather'][0]['main'].lower(),
+                "sunset": ""
                 }
             result.append(single_hour_info)
         return result
@@ -100,4 +114,4 @@ class WeatherService:
 if __name__ == "__main__":
     # assert(WeatherService.validate_request_args("texas", "pflugerville", "7866") == False)
     # print(WeatherService.get_current_report("Texas","Pflugerville","78660"))
-    print(WeatherService.get_hourly_info(lat=30.4421, lon=-97.6299))
+    pprint(WeatherService.get_hourly_info(lat=30.4421, lon=-97.6299))

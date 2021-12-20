@@ -51,7 +51,7 @@ def get_latest_energy_data():
 def store_energy_data(energy_data: List[dict]):
     with open("energy_usages.txt", 'a') as file:
         for data in energy_data:
-            file.write(f'{data["dates"]},{data["usage"]},{data["cost"]},{datetime.now()}\n')
+            file.write(f'{data["dates"]},{data["usage"]},{data["cost"]},{datetime.now().replace(hour=0, minute=0, second=0)}\n')
 
 
 def get_stored_energy_data()-> List[dict]:

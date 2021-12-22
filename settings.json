@@ -1,9 +1,5 @@
 {
-  "activate_sunset_routine": true,
-  "activate_hourly_weather_update": true,
-  "activate_battery_info": true,
-  "activate_energy_usage_chart": true,
-  "twelve_minutes": 720000,
-  "fifteen_minutes": 900000,
-  "one_hour": 3600000
+  "battery_update_time": 720000,
+  "sunset_routine": true,
+  "weather_update_time": 3600000
 }

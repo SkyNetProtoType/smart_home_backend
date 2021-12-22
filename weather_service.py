@@ -83,7 +83,7 @@ class WeatherService:
             "temp": convert_to_fahrenheit(current['temp']),
             "sunset": convert_to_localtime(current['sunset']),
             "feels_like": convert_to_fahrenheit(current['feels_like']),
-            "description": current['weather'][0]['main'], 
+            "description": current['weather'][0]['main'].lower(), 
             "chance_of_rain": "",
         })
 

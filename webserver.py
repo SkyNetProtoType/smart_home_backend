@@ -83,7 +83,7 @@ def lights(light_type, action, value):
 @app.route("/settings", methods=['POST','GET'])
 def settings():
   if 'GET' == request.method:
-    return jsonify(settings = SettingsService.get_dashboard_settings())
+    return jsonify(SettingsService.get_dashboard_settings())
   else:
     updated_settings = request.get_json()
     SettingsService.update_dashboard_settings(updated_settings)

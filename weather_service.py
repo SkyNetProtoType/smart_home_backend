@@ -82,6 +82,7 @@ class WeatherService:
             "time": convert_to_localtime(current['dt'], ignore_minutes=True),
             "temp": convert_to_fahrenheit(current['temp']),
             "sunset": convert_to_localtime(current['sunset']),
+            "sunset_unix": current['sunset'],
             "feels_like": convert_to_fahrenheit(current['feels_like']),
             "description": current['weather'][0]['main'].lower(), 
             "chance_of_rain": "",
@@ -101,7 +102,8 @@ class WeatherService:
                 "feels_like": convert_to_fahrenheit(info['feels_like']),
                 "chance_of_rain":str(int(info['pop']) * 100), 
                 "description": info['weather'][0]['main'].lower(),
-                "sunset": ""
+                "sunset": "",
+                "sunset_unix": "",
                 }
             result.append(single_hour_info)
         return result

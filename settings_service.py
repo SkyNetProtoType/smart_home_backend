@@ -22,7 +22,8 @@ if __name__ == "__main__":
     updated_settings = {
         'sunset_routine': True if input("Sunset settings: Enter 'Y'/'N': ").lower() == "y" else False,
         "battery_update_time": 720000,
-        "weather_update_time": 3600000
+        "weather_update_time": 3600000,
+        "lamp_brightness":85,
     }
     print()
     SettingsService.update_dashboard_settings(updated_settings)

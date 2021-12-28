@@ -1,5 +1,6 @@
 {
   "battery_update_time": 720000,
   "sunset_routine": true,
-  "weather_update_time": 3600000
+  "weather_update_time": 3600000,
+  "lamp_brightness": 100
 }

@@ -30,8 +30,8 @@ def weather_hourly():
   return jsonify(hourly_weather_infos = WeatherService.get_hourly_info(lat=30.4421, lon=-97.6299))
 
 
-@app.route("/products", methods = ['POST', 'GET'])
-def products():
+@app.route("/products/<product_type>", methods = ['POST', 'GET'])
+def products(product_type):
   if 'GET' == request.method:
     return jsonify(products = ProductService.get_products())
   else:
@@ -41,8 +41,8 @@ def products():
     return jsonify(product['id'])
 
 
-@app.route("/product", methods=['POST'])
-def product():
+@app.route("/product/<product_type>", methods=['POST'])
+def product(product_type):
   product = request.get_json()
   ProductService.add_new_product(product)
   print("New item inserted with id: ", product['id'])

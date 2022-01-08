@@ -15,3 +15,6 @@ To log the dependencies to install:
 1. Make sure you have your virtual environment activated
 2. Install any dependencies you need using the 'pip' command
 3. Enter 'pip freeze > requirements.txt' to log all your dependencies into that text file
+
+INSTALLING YOUR DEPENDENCIES FROM REQUIREMENTS.TXT
+o Enter 'pip install -r requirments.txt'

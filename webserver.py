@@ -7,6 +7,7 @@ from energy_service import handle_energy_data_request
 from system_util import SystemUtil
 from light_service import LightService, LightType
 from settings_service import SettingsService
+import asyncio
 
 app = Flask(__name__)
 # app.debug = True
@@ -88,6 +89,10 @@ def settings():
     updated_settings = request.get_json()
     SettingsService.update_dashboard_settings(updated_settings)
     return jsonify({"status": "Update Successful"})
+
+@app.route("/smart_plug/<toggle_state>", methods=["GET", "POST"])
+def smart_plug(toggle_state: str):
+  return jsonify({"plug_state": asyncio.run(SystemUtil.toggle_smart_plug(toggle_state))})
 
 
 if __name__ == "__main__":

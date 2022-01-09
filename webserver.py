@@ -72,7 +72,11 @@ def battery():
 @app.route("/light/<light_type>/<action>/<value>", methods=['GET'])
 def lights(light_type, action, value):
   if "living_floor_lamp" == light_type.lower() and "toggle" == action:
-    return jsonify(status = LightService.toggle(LightType.LIVING_ROOM_FLOOR_LAMP))
+    if "on" == value:
+      return jsonify(status = LightService.turn_on(LightType.LIVING_ROOM_FLOOR_LAMP))
+    else:
+      return jsonify(status = LightService.turn_off(LightType.LIVING_ROOM_FLOOR_LAMP))
+    
   
   elif "living_floor_lamp" == light_type.lower() and "brightness" == action:
     return jsonify(status = LightService.adjust_brightness(LightType.LIVING_ROOM_FLOOR_LAMP, int(value)))

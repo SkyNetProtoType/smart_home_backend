@@ -43,7 +43,8 @@ class BRI:
         and provides the appropriate response.
         '''
         
-        respond_for_command = self._parser.get_reponse(command.lower())
+        # respond_for_command = self._parser.get_reponse(command.lower()) #uncomment to use default parsing
+        respond_for_command = self._parser.get_reponse(command.lower(), purpose='smart_home')
         self.speak(respond_for_command())
              
 

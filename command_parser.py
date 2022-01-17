@@ -1,4 +1,5 @@
-from weather import Weather
+from email.policy import default
+from weather_service import Weather
 from arithmetic import BasicMath
 from tv_controller import TV
 from encyclopedia import Encyclopedia
@@ -11,11 +12,11 @@ class Command_Parser:
 
     def __init__(self) -> None:
         self._command = None
-        self._math = BasicMath()
-        self._weather = Weather()
+        # self._math = BasicMath()
+        # self._weather = Weather()
   
     
-    def get_reponse(self, user_command):
+    def get_reponse(self, user_command, purpose="default"):
         '''
             Takes in a user command and determines which response function to return to the AI.
             The AI doesn't know which specific method is being called. The order of if
@@ -23,7 +24,17 @@ class Command_Parser:
             Uses the Factory Design Pattern
         '''
         self._command = user_command.lower() # if the command is to be used anywhere else
+        if 'default' == purpose:
+            return self.default_parsing(user_command) #returns a default parsing method to call
+        elif 'smart_home' == purpose:
+            return self.parse_for_smarthome(user_command) #returns a smart_home method to call
+ 
 
+    def parse_for_smarthome(self, user_command):
+        pass
+
+
+    def default_parsing(self, user_command: str):
         if "weather" in user_command or "temperature" in user_command:
             return self.__report_weather
         elif re.search("[+-/*//]", user_command):
@@ -34,7 +45,7 @@ class Command_Parser:
             return self.__control_tv
         else:
             return self.__unknown_response
-
+        
     def __search_encyclopedia(self):
         enc = Encyclopedia()
         summary = ""

@@ -10,6 +10,7 @@ from settings_service import SettingsService
 import asyncio
 
 app = Flask(__name__)
+loop = asyncio.get_event_loop()
 # app.debug = True
 CORS(app)
 
@@ -96,7 +97,7 @@ def settings():
 
 @app.route("/smart_plug/<toggle_state>", methods=["GET", "POST"])
 def smart_plug(toggle_state: str):
-  return jsonify({"plug_state": asyncio.run(SystemUtil.toggle_smart_plug(toggle_state))})
+  return jsonify({"plug_state": loop.run_until_complete(SystemUtil.toggle_smart_plug(toggle_state))})
 
 
 if __name__ == "__main__":

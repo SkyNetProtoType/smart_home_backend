@@ -18,12 +18,15 @@ class LightService:
         lamp_properties = LightService.floor_lamp.get_properties()
         is_already_on = lamp_properties['power'] == 'on'
         if light_type == LightType.LIVING_ROOM_FLOOR_LAMP and not is_already_on:
-            try:
-                LightService.floor_lamp.turn_on()
-                status = "successful"
-            except Exception as e:
-                print (e)
-                status = "error"
+            for attempt in range(1, 4): #3 times
+                try:
+                    LightService.floor_lamp.turn_on()
+                    status = "successful"
+                except Exception as e:
+                    print (f'Attempt {attempt}: {e}')
+                    status = "error"
+                else:
+                    break #exit attempting once succeeded.
         return status
     
     @staticmethod
@@ -32,12 +35,15 @@ class LightService:
         lamp_properties = LightService.floor_lamp.get_properties()
         is_already_off = lamp_properties['power'] == 'off'
         if light_type == LightType.LIVING_ROOM_FLOOR_LAMP and not is_already_off:
-            try:
-                LightService.floor_lamp.turn_off()
-                status = "succesful"
-            except Exception as e:
-                print (e)
-                status = "error"
+            for attempt in range(3):
+                try:
+                    LightService.floor_lamp.turn_off()
+                    status = "succesful"
+                except Exception as e:
+                    print (f'Attempt {attempt}: {e}')
+                    status = "error"
+                else:
+                    break #exit attempting once succeeded.
         return status
 
     @staticmethod

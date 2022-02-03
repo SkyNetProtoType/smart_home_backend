@@ -76,6 +76,12 @@ class WeatherService:
             raise RuntimeError("Request Failed with a response status code: {}".format(status_code))
         
         data = response.json()
+        alert_description = ""
+        try:
+            alert_description = data['alerts'][0]['description']
+            alert_description = alert_description[: alert_description.index("...\n*")]
+        except KeyError:
+            pass
         #current info
         current = data['current']
         result.append({
@@ -86,15 +92,13 @@ class WeatherService:
             "feels_like": convert_to_fahrenheit(current['feels_like']),
             "description": current['weather'][0]['main'].lower(), 
             "chance_of_rain": "",
+            "alerts": alert_description
         })
+       
 
         #hourly info
         hourly_info = data['hourly'][1:4] #next 3 hours after current hour
-        alerts = []
-        try:
-            alerts = data['alerts']
-        except KeyError:
-            alerts = [{"event": "no alerts"}]
+
         for info in hourly_info:
             single_hour_info = {
                 "time" : convert_to_localtime(info['dt'], ignore_minutes=True),

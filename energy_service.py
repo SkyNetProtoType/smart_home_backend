@@ -28,7 +28,8 @@ def get_latest_energy_data():
     energy_data: List[dict] = []
 
     for each_mail in week_summary:
-        _, data = mail.fetch(each_mail, '(RFC822)')
+        _, data = mail.uid('fetch', each_mail, '(RFC822)')
+        # _, data = mail.fetch(each_mail, '(RFC822)')
         raw_email = data[0][1]
         email_content = email.message_from_string(raw_email.decode('utf-8'))
         date_range = email_content["subject"].split(": ")[-1]

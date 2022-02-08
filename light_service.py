@@ -11,7 +11,7 @@ class LightType(Enum):
 
 class LightService:
     floor_lamp = Bulb(LIVING_ROOM_FLOOR_LAMP)
-    floor_lamp.start_music()
+    # floor_lamp.start_music()
     # print("came to static field first")
 
     def __init__(self) -> None:

@@ -79,9 +79,15 @@ class WeatherService:
         alert_description = ""
         try:
             alert_description = data['alerts'][0]['description']
-            alert_description = alert_description[: alert_description.index("...\n*")]
+            if "...\n*" in alert_description:
+                alert_description = alert_description[: alert_description.index("...\n*")]
+            else:
+                alert_description = ""
         except KeyError:
             pass
+        except Exception as e:
+            print("An error occured while getting alert description: ", e)
+            alert_description = ""
         #current info
         current = data['current']
         result.append({

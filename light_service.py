@@ -10,7 +10,6 @@ class LightType(Enum):
 
 
 class LightService:
-    floor_lamp = Bulb(LIVING_ROOM_FLOOR_LAMP)
     # floor_lamp.start_music()
     # print("came to static field first")
 
@@ -20,12 +19,13 @@ class LightService:
     @staticmethod
     def turn_on(light_type: object):
         status = "already_on"
-        lamp_properties = LightService.floor_lamp.get_properties()
+        floor_lamp = Bulb(LIVING_ROOM_FLOOR_LAMP)   # create a new socket connection to the bulb
+        lamp_properties = floor_lamp.get_properties()
         is_already_on = lamp_properties['power'] == 'on'
         if light_type == LightType.LIVING_ROOM_FLOOR_LAMP and not is_already_on:
             for attempt in range(1, 4): #3 times
                 try:
-                    LightService.floor_lamp.turn_on()
+                    floor_lamp.turn_on()
                     status = "successful"
                 except BulbException as e:
                     print (f'Attempt {attempt}: {e}')
@@ -40,12 +40,13 @@ class LightService:
     @staticmethod
     def turn_off(light_type: object):
         status = "already off"
-        lamp_properties = LightService.floor_lamp.get_properties()
+        floor_lamp = Bulb(LIVING_ROOM_FLOOR_LAMP)   # create a new socket connection to the bulb
+        lamp_properties = floor_lamp.get_properties()
         is_already_off = lamp_properties['power'] == 'off'
         if light_type == LightType.LIVING_ROOM_FLOOR_LAMP and not is_already_off:
             for attempt in range(3):
                 try:
-                    LightService.floor_lamp.turn_off()
+                    floor_lamp.turn_off()
                     status = "succesful"
                 except BulbException as e:
                     print (f'Attempt {attempt}: {e}')
@@ -60,9 +61,10 @@ class LightService:
     @staticmethod
     def toggle(light_type: object):
         status = ""
+        floor_lamp = Bulb(LIVING_ROOM_FLOOR_LAMP)   # create a new socket connection to the bulb
         if light_type == LightType.LIVING_ROOM_FLOOR_LAMP:
             try:
-                status = LightService.floor_lamp.toggle()
+                status = floor_lamp.toggle()
             except BulbException as e:
                 print (e)
                 status = "error"
@@ -71,12 +73,13 @@ class LightService:
     @staticmethod
     def adjust_brightness(light_type: object, amount: int):
         status = ""
-        lamp_properties = LightService.floor_lamp.get_properties()
+        floor_lamp = Bulb(LIVING_ROOM_FLOOR_LAMP)   # create a new socket connection to the bulb
+        lamp_properties = floor_lamp.get_properties()
         is_already_off = lamp_properties['power'] == 'off'
         if light_type == LightType.LIVING_ROOM_FLOOR_LAMP and not is_already_off:
             for attempt in range(3):
                 try:
-                    status = LightService.floor_lamp.set_brightness(amount)
+                    status = floor_lamp.set_brightness(amount)
                 except BulbException as e:
                     print (f'Attempt {attempt}: {e}')
                     status = "error"

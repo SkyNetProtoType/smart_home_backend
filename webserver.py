@@ -78,7 +78,7 @@ def lights(light_type, action, value):
     else:
       return jsonify(status = LightService.turn_off(LightType.LIVING_ROOM_FLOOR_LAMP))
     
-  
+   
   elif "living_floor_lamp" == light_type.lower() and "brightness" == action:
     return jsonify(status = LightService.adjust_brightness(LightType.LIVING_ROOM_FLOOR_LAMP, int(value)))
 

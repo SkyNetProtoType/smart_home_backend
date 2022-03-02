@@ -1,3 +1,4 @@
+from typing import List
 from flask import Flask, json, jsonify, request
 from flask_cors import CORS
 from product_service import ProductService
@@ -7,6 +8,7 @@ from energy_service import handle_energy_data_request
 from system_util import SystemUtil
 from light_service import LightService, LightType
 from settings_service import SettingsService
+from pprint import pprint
 import asyncio
 
 app = Flask(__name__)
@@ -32,32 +34,47 @@ def weather_hourly():
   return jsonify(hourly_weather_infos = WeatherService.get_hourly_info(lat=30.4421, lon=-97.6299))
 
 
-@app.route("/products/<product_type>", methods = ['POST', 'GET'])
+@app.route("/products/<product_type>", methods = ['GET'])
 def products(product_type):
-  if 'GET' == request.method:
-    return jsonify(products = ProductService.get_products())
-  else:
-    product = request.get_json()
+  return jsonify(products = ProductService.get_products())
+
+
+@app.route("/product/<action>/<product_type>", methods=['POST'])
+def product(action, product_type):
+  product = request.get_json()
+  if action == "insert":
+    ProductService.add_new_product(product)
+    print("New item inserted with id: ", product['id'])
+
+  elif action == 'update':
     product['addedToCart'] = 1 if product['addedToCart'] == True else 0
     ProductService.update_product(product)
-    return jsonify(product['id'])
-
-
-@app.route("/product/<product_type>", methods=['POST'])
-def product(product_type):
-  product = request.get_json()
-  ProductService.add_new_product(product)
-  print("New item inserted with id: ", product['id'])
   return jsonify(product['id'])
+
+
+@app.route("/product/update/bulk", methods=["POST"])
+def bulkProductUpdate() :
+  products: List[dict] = request.get_json()
+  for product in products:
+    ProductService.update_product(product)
+  return jsonify("All updated")
 
 
 @app.route("/send/cart", methods=['POST'])
 def send_cart_to_phone():
-  cart_products = ProductService.get_cart_products()
-  shopping_list_id = 2276166027
+  cart_items = request.get_json()
+  cart_items = [item['name'] for item in cart_items]
+  # pprint(cart_items)
   service = TodoistService()
-  for item in cart_products:
-    service.addItemToProject(item['name'], shopping_list_id)
+  service.addItemsToProject(cart_items, project_id=2276166027)
+  return jsonify(response = "success")
+
+
+@app.route("/cart/queue", methods=['GET'])
+def cart_queue():
+  service = TodoistService()
+  cart_queue_items = service.processQueueItems(queue_id=2285886894)
+  return jsonify(cart_queue_items = cart_queue_items)
   
   
 @app.route("/energy", methods=['GET'])

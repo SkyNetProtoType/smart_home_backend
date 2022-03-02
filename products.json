@@ -1,0 +1,18 @@
+{
+  "products": [
+    {
+      "name": "rice",
+      "category": "Grocery",
+      "quantity": 1,
+      "addedToCart": false,
+      "id": "1"
+    },
+    {
+      "name": "bread",
+      "category": "Grocery",
+      "quantity": 1,
+      "addedToCart": false,
+      "id": "2"
+    }
+  ]
+}

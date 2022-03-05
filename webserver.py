@@ -52,7 +52,7 @@ def product(action, product_type):
   return jsonify(product['id'])
 
 
-@app.route("/product/update/bulk", methods=["POST"])
+@app.route("/products/update/bulk", methods=["POST"])
 def bulkProductUpdate() :
   products: List[dict] = request.get_json()
   for product in products:

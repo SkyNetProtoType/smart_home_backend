@@ -63,9 +63,9 @@ def bulkProductUpdate() :
 @app.route("/send/cart", methods=['POST'])
 def send_cart_to_phone():
   cart_items = request.get_json()
-  print(cart_items)
+  # print(cart_items)
   cart_items = [item['name'] for item in cart_items]
-  # pprint(cart_items)
+  pprint(cart_items)
   service = TodoistService()
   service.addItemsToProject(cart_items, project_id=2276166027)
   return jsonify(response = "success")

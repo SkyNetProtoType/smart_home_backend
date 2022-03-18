@@ -1,3 +1,4 @@
+from audioop import add
 from typing import List
 from pprint import pprint
 from todoist import TodoistAPI
@@ -36,8 +37,7 @@ class TodoistService:
 
     def addItemsToProject(self, items: List[str], project_id: int):
         for item in items:
-            self._api.items.add(item)
-        self._api.commit()
+            self.addItemToProject(item, proj_id=project_id)
 
 
     def findById(self, search_list, obj_id):

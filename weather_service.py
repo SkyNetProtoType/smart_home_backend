@@ -64,7 +64,7 @@ class WeatherService:
         }
     
     @staticmethod
-    def get_hourly_info(lat, lon):
+    def get_hourly_info(lat, lon, limit):
         '''Gets the hourly weather report and only keeps the next 3 hours'''
 
         result = []
@@ -103,7 +103,7 @@ class WeatherService:
        
 
         #hourly info
-        hourly_info = data['hourly'][1:4] #next 3 hours after current hour
+        hourly_info = data['hourly'][1:4]
 
         for info in hourly_info:
             single_hour_info = {

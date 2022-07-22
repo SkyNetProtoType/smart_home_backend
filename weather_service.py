@@ -63,7 +63,9 @@ class WeatherService:
             'zipcode' : zip,
         }
     
+    """
     @staticmethod
+
     def get_hourly_info(lat, lon, limit):
         '''Gets the hourly weather report and only keeps the next 3 hours'''
 
@@ -117,13 +119,17 @@ class WeatherService:
                 }
             result.append(single_hour_info)
         return result
-
+    """
+    
     @staticmethod
-    def get_daily_info(lat, lon, limit):
+    def get_weather_info(lat, lon, limit, timeframe:str):
         '''Gets the hourly weather report and only keeps the next n hours'''
 
         result = []
-        exclude = "minutely,hourly"
+        timeframes = ["minutely", "hourly", "daily"]
+        
+        exclude = ''.join(timeframes.remove(timeframe.lower()))
+
         url = f"{BASE_URL_ONE_CALL}?lat={lat}&lon={lon}&exclude={exclude}&appid={API_KEY}"
         response = requests.get(url)
         status_code = response.status_code
@@ -144,35 +150,67 @@ class WeatherService:
             print("An error occured while getting alert description: ", e)
             alert_description = ""
 
-        #current info
-        todays_weather = data['daily'][0]
-        result.append({
-            "time": convert_to_localtime(todays_weather['dt'], ignore_minutes=True),
-            "temp": convert_to_fahrenheit(todays_weather['temp']),
-            "sunset": convert_to_localtime(todays_weather['sunset']),
-            "sunset_unix": todays_weather['sunset'],
-            "feels_like": convert_to_fahrenheit(todays_weather['feels_like']),
-            "description": todays_weather['weather'][0]['main'].lower(), 
-            "chance_of_rain": "",
-            "alerts": alert_description
-        })
+        if timeframe == "hourly":
+            
+            #current info
+            current = data['current']
+            result.append({
+                "time": convert_to_localtime(current['dt'], ignore_minutes=True),
+                "temp": convert_to_fahrenheit(current['temp']),
+                "sunset": convert_to_localtime(current['sunset']),
+                "sunset_unix": current['sunset'],
+                "feels_like": convert_to_fahrenheit(current['feels_like']),
+                "description": current['weather'][0]['main'].lower(), 
+                "chance_of_rain": "",
+                "alerts": alert_description
+            })
+
+            #hourly info
+            hourly_info = data['hourly'][1:limit]
+
+            for info in hourly_info:
+                single_hour_info = {
+                    "time" : convert_to_localtime(info['dt'], ignore_minutes=True),
+                    "temp": convert_to_fahrenheit(info['temp']),
+                    "feels_like": convert_to_fahrenheit(info['feels_like']),
+                    "chance_of_rain":str(int(info['pop']) * 100), 
+                    "description": info['weather'][0]['main'].lower(),
+                    "sunset": "",
+                    "sunset_unix": "",
+                    }
+                result.append(single_hour_info)
+            return result
+
+        elif timeframe == "daily":
+            #current info
+            todays_weather = data['daily'][0]
+            result.append({
+                "time": convert_to_localtime(todays_weather['dt'], ignore_minutes=True),
+                "temp": convert_to_fahrenheit(todays_weather['temp']),
+                "sunset": convert_to_localtime(todays_weather['sunset']),
+                "sunset_unix": todays_weather['sunset'],
+                "feels_like": convert_to_fahrenheit(todays_weather['feels_like']),
+                "description": todays_weather['weather'][0]['main'].lower(), 
+                "chance_of_rain": "",
+                "alerts": alert_description
+            })
        
 
-        #following days weather info
-        next_days_info = data['daily'][1:limit]
+            #following days weather info
+            next_days_info = data['daily'][1:limit]
 
-        for info in next_days_info:
-            single_day_info = {
-                "time" : convert_to_localtime(info['dt'], ignore_minutes=True),
-                "temp": convert_to_fahrenheit(info['temp']),
-                "feels_like": convert_to_fahrenheit(info['feels_like']),
-                "chance_of_rain":str(int(info['pop']) * 100), 
-                "description": info['weather'][0]['main'].lower(),
-                "sunset": "",
-                "sunset_unix": "",
-                }
-            result.append(single_day_info)
-        return result # today's weather + n days weather
+            for info in next_days_info:
+                single_day_info = {
+                    "time" : convert_to_localtime(info['dt'], ignore_minutes=True),
+                    "temp": convert_to_fahrenheit(info['temp']),
+                    "feels_like": convert_to_fahrenheit(info['feels_like']),
+                    "chance_of_rain":str(int(info['pop']) * 100), 
+                    "description": info['weather'][0]['main'].lower(),
+                    "sunset": "",
+                    "sunset_unix": "",
+                    }
+                result.append(single_day_info)
+            return result # today's weather + n days weather
 
     
 
